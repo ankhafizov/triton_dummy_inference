@@ -1,0 +1,6 @@
+services:
+  triton:
+    build: ./server
+    ports:
+      - 8000:8000
+    shm_size: '1gb'

@@ -1,16 +1,29 @@
-# Project goal
+# Nvidia Triton based inference
 
-The goal of the project is to serve the same deep learning pipeline with different inference frameworks.
+Recognition of russian car license plates using neural networks served by [Nvidia Triton Inference Server](https://developer.nvidia.com/nvidia-triton-inference-server).
 
-The task chosen is recognition of russian car license plates. Models were taken from [this repository](https://github.com/EtokonE/License_Plate_Recognition).
+# Start
 
-# Repository structure
+```bash
+cd docker
+DOCKER_BUILDKIT=1 docker-compose -f prod.yml up --build
+```
 
-- __nn__ - package with models
-- __inference_triton__ - package for serving with [Nvidia Triton Inference Server](https://developer.nvidia.com/nvidia-triton-inference-server)
-- __inference_torchserve__ - package for serving with [TorchServe](https://pytorch.org/serve/)
+# Tests
 
-# Posts
+1. Start Triton Inference Server
 
-- [inference_triton](https://habr.com/ru/post/717890/)
-- [inference_torchserve](https://habr.com/ru/articles/727484/)
+    See [Start](#start).
+
+2. Install and activate virtual environment
+
+    ```bash
+    poetry install --with=dev
+    poetry shell
+    ```
+
+3. Run tests
+
+    ```bash
+    pytest ./tests -vv --disable-warnings
+    ```
