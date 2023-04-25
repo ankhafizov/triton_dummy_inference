@@ -4,3 +4,10 @@ services:
     ports:
       - 8000:8000
     shm_size: '1gb'
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - capabilities: [gpu]
+    container_name: triton
+    
