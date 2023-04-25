@@ -31,7 +31,11 @@ if __name__ == "__main__":
     for txt, coord in zip(texts, coordinates):
         x1, y1, x2, y2 = coord
         print(x1, y1, x2, y2)
+        image = cv2.resize(image, (1920, 1080), interpolation=cv2.INTER_AREA)
         image = cv2.rectangle(image, (x1, y1), (x2, y2), [0, 0, 255], 2)
+        image = cv2.putText(image, txt, (x1, y1-10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.4, [0, 0, 255], 2)
 
+    image = cv2.resize(image, (960, 540), interpolation=cv2.INTER_AREA)
     cv2.imshow("plates", image)
     cv2.waitKey(0)
