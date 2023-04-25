@@ -6,9 +6,9 @@ import numpy as np
 import triton_python_backend_utils as pb_utils
 from torch.utils.dlpack import from_dlpack
 
-from nn.nn.inference.decode import beam_decode
-from nn.nn.inference.predictor import filter_predictions
-from nn.nn.settings import settings
+from nn_utils.inference.decode import beam_decode
+from nn_utils.inference.predictor import filter_predictions
+from nn_utils.settings import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__file__)

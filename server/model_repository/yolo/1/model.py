@@ -4,9 +4,9 @@ from typing import List
 import torch
 import triton_python_backend_utils as pb_utils
 
-from nn.nn.inference.predictor import prepare_detection_input, prepare_recognition_input
-from nn.nn.models import load_yolo
-from nn.nn.settings import settings
+from nn_utils.inference.predictor import prepare_detection_input, prepare_recognition_input
+from nn_utils.models import load_yolo
+from nn_utils.settings import settings
 
 
 class TritonPythonModel:

@@ -9,8 +9,8 @@ import torch.nn as nn
 from numpy import ndarray
 from torch import Tensor, device
 
-from nn.nn.models import LPRNet, SpatialTransformer
-from nn.nn.settings import settings
+from nn_utils.models import LPRNet, SpatialTransformer
+from nn_utils.settings import settings
 
 
 def prepare_detection_input(image: Union[ndarray, str, Path]) -> ndarray:
