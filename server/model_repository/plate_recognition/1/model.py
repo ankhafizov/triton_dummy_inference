@@ -6,9 +6,9 @@ import numpy as np
 import triton_python_backend_utils as pb_utils
 from torch.utils.dlpack import from_dlpack
 
-from nn.inference.decode import beam_decode
-from nn.inference.predictor import filter_predictions
-from nn.settings import settings
+from nn.nn.inference.decode import beam_decode
+from nn.nn.inference.predictor import filter_predictions
+from nn.nn.settings import settings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__file__)
@@ -28,7 +28,8 @@ class TritonPythonModel:
             # send to yolo model
             cropped_images, coordinates = self.predict(
                 model_name="yolo",
-                inputs=[pb_utils.get_input_tensor_by_name(request, "input__0")],
+                inputs=[pb_utils.get_input_tensor_by_name(
+                    request, "input__0")],
                 output_names=["output__0", "output__1"],
             )
             logger.info("yolo finished")
@@ -39,7 +40,8 @@ class TritonPythonModel:
             if num_plates == 0:
                 logger.info("no plates")
                 output_tensors = [
-                    pb_utils.Tensor.from_dlpack("coordinates", coordinates.to_dlpack()),
+                    pb_utils.Tensor.from_dlpack(
+                        "coordinates", coordinates.to_dlpack()),
                     pb_utils.Tensor("texts", np.array([], dtype=np.object_)),
                 ]
                 inference_response = pb_utils.InferenceResponse(
@@ -52,7 +54,8 @@ class TritonPythonModel:
             (plate_features,) = self.predict(
                 model_name="stn",
                 inputs=[
-                    pb_utils.Tensor.from_dlpack("input__0", cropped_images.to_dlpack())
+                    pb_utils.Tensor.from_dlpack(
+                        "input__0", cropped_images.to_dlpack())
                 ],
                 output_names=["output__0"],
             )
@@ -62,7 +65,8 @@ class TritonPythonModel:
             (text_features,) = self.predict(
                 model_name="lprnet",
                 inputs=[
-                    pb_utils.Tensor.from_dlpack("input__0", plate_features.to_dlpack())
+                    pb_utils.Tensor.from_dlpack(
+                        "input__0", plate_features.to_dlpack())
                 ],
                 output_names=["output__0"],
             )
@@ -79,8 +83,10 @@ class TritonPythonModel:
             ]  # replace Nones with empty string
 
             output_tensors = [
-                pb_utils.Tensor.from_dlpack("coordinates", coordinates.to_dlpack()),
-                pb_utils.Tensor("texts", np.array(predicted_plates, dtype=np.object_)),
+                pb_utils.Tensor.from_dlpack(
+                    "coordinates", coordinates.to_dlpack()),
+                pb_utils.Tensor("texts", np.array(
+                    predicted_plates, dtype=np.object_)),
             ]
 
             inference_response = pb_utils.InferenceResponse(
@@ -102,6 +108,7 @@ class TritonPythonModel:
         infer_response = infer_request.exec()
 
         if infer_response.has_error():
-            raise pb_utils.TritonModelException(infer_response.error().message())
+            raise pb_utils.TritonModelException(
+                infer_response.error().message())
 
         return infer_response.output_tensors()

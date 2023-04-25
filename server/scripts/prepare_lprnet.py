@@ -2,8 +2,8 @@ from pathlib import Path
 
 import torch
 
-from nn.models import load_lprnet
-from nn.settings import settings
+from nn.nn.models import load_lprnet
+from nn.nn.settings import settings
 
 if __name__ == "__main__":
     model_path = (

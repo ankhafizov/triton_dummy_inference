@@ -4,16 +4,17 @@ from typing import List
 import torch
 import triton_python_backend_utils as pb_utils
 
-from nn.inference.predictor import prepare_detection_input, prepare_recognition_input
-from nn.models import load_yolo
-from nn.settings import settings
+from nn.nn.inference.predictor import prepare_detection_input, prepare_recognition_input
+from nn.nn.models import load_yolo
+from nn.nn.settings import settings
 
 
 class TritonPythonModel:
     def initialize(self, args):
         self.model_config = json.loads(args["model_config"])
         self.model = load_yolo(
-            settings.YOLO.WEIGHTS, settings.YOLO.CONFIDENCE, torch.device("cuda")
+            settings.YOLO.WEIGHTS, settings.YOLO.CONFIDENCE, torch.device(
+                "cuda")
         )
 
         output0_config = pb_utils.get_output_config_by_name(
@@ -37,7 +38,8 @@ class TritonPythonModel:
         responses = []
 
         for request in requests:
-            image = pb_utils.get_input_tensor_by_name(request, "input__0").as_numpy()
+            image = pb_utils.get_input_tensor_by_name(
+                request, "input__0").as_numpy()
             image = prepare_detection_input(image)
 
             detection = self.model(image, size=settings.YOLO.PREDICT_SIZE)

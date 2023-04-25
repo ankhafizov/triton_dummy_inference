@@ -9,8 +9,8 @@ import torch.nn as nn
 from numpy import ndarray
 from torch import Tensor, device
 
-from nn.models import LPRNet, SpatialTransformer
-from nn.settings import settings
+from nn.nn.models import LPRNet, SpatialTransformer
+from nn.nn.settings import settings
 
 
 def prepare_detection_input(image: Union[ndarray, str, Path]) -> ndarray:
@@ -110,7 +110,8 @@ class Predictor:
         predictions = self._lprn(transfer)
         predictions = predictions.cpu().detach().numpy()
 
-        labels, log_likelihood, _ = self._decode_fn(predictions, settings.VOCAB.VOCAB)
+        labels, log_likelihood, _ = self._decode_fn(
+            predictions, settings.VOCAB.VOCAB)
         df_results["number"] = filter_predictions(labels, log_likelihood)
 
         results = [
